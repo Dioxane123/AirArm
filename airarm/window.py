@@ -33,13 +33,13 @@ def draw_landmarks(frame: MatLike, obs: HandObservation, *,
         for start, end in HAND_EDGES:
             cv2.line(frame, points[start], points[end], (90, 200, 90), 2)
         for index, point in enumerate(points):
-            color = (255, 255, 0) if index in PALM_IDS else (255, 255, 255)
+            color = (0, 255, 255) if index in PALM_IDS else (255, 255, 255)
             cv2.circle(frame, point, 3, color, -1)
             if show_ids:
                 cv2.putText(frame, str(index), (point[0] + 5, point[1] - 5),
-                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 90, 90), 1)
+                             cv2.FONT_HERSHEY_SIMPLEX, 0.4, color, 1)
         if obs.palm_xy is not None:
-            cv2.drawMarker(frame, to_pixel(obs.palm_xy), (153, 153, 255),
+            cv2.drawMarker(frame, to_pixel(obs.palm_xy), (255, 153, 153),
                             cv2.MARKER_CROSS, 10, 2)
 
     status_color = (100, 240, 100) if obs.valid else (0, 190, 255)

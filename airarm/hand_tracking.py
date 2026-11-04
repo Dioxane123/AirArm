@@ -10,7 +10,7 @@ from typing import Sequence
 
 
 Point = tuple[float, float]
-PALM_IDS = (0, 5, 9, 13, 17)  # 手腕，以及食指、中指、无名指、小指的指根。
+PALM_IDS = (0, 2, 5, 9, 13, 17)  # 手腕，以及拇指、食指、中指、无名指、小指的指根。
 HAND_EDGES = (
     (0, 1), (1, 2), (2, 3), (3, 4),
     (0, 5), (5, 6), (6, 7), (7, 8),
