@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import Literal
 
 class ProgramArgs(argparse.Namespace):
+    mode: Literal["hand", "arm"]
+    scene: Path
+    control: Literal["preset", "keyboard"]
     index: int
     video: Path | None
     model: Path

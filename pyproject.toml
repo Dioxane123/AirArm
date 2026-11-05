@@ -8,6 +8,7 @@ dependencies = [
     "mediapipe>=1.2.0",
     "mink>=1.4.0",
     "mujoco>=3.17.0",
+    "mujoco-stubs==3.17.0.*",
     "numpy>=2.4.6",
     "opencv-contrib-python>=5.0.0.93",
     "qpsolvers[daqp]>=4.13.0",

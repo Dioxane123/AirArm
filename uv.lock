@@ -23,6 +23,7 @@ dependencies = [
     { name = "mediapipe" },
     { name = "mink" },
     { name = "mujoco" },
+    { name = "mujoco-stubs" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "opencv-contrib-python" },
@@ -34,6 +35,7 @@ requires-dist = [
     { name = "mediapipe", specifier = ">=1.2.0" },
     { name = "mink", specifier = ">=1.4.0" },
     { name = "mujoco", specifier = ">=3.17.0" },
+    { name = "mujoco-stubs", specifier = "==3.17.0.*" },
     { name = "numpy", specifier = ">=2.4.6" },
     { name = "opencv-contrib-python", specifier = ">=5.0.0.93" },
     { name = "qpsolvers", extras = ["daqp"], specifier = ">=4.13.0" },
@@ -804,6 +806,20 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/00/69/b77e0c71b5bd9af205dfdeb90e6c0ed9aec01b759f0261142392e8228203/mujoco-3.17.0-cp315-cp315t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:982607e1083aa9ccd4ad763ff65d813b242347ed196d88cfc6fde9ea60337c72", size = 25602251, upload-time = "2026-10-22T23:58:37.366Z" },
     { url = "https://files.pythonhosted.org/packages/65/32/d4e6d02f660df217c864d9bd1c577f89886242dd36493163e24645ae057c/mujoco-3.17.0-cp315-cp315t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:c5d5dcf009b8a1c90e58d2792b0eade2a6bc3161fb950c2d3de35cac65bcb902", size = 26665893, upload-time = "2026-10-22T23:58:40.824Z" },
     { url = "https://files.pythonhosted.org/packages/d8/3e/1cb24eb4aee694ecac32ed5c3ae0deba6e49ae6ab2ee52da3801c5cd14d4/mujoco-3.17.0-cp315-cp315t-win_amd64.whl", hash = "sha256:242bf93b607fe575f395cb9aecadf0fd5efcd6d6eac760c74e4a402c4115e4b8", size = 17442205, upload-time = "2026-10-22T23:58:43.901Z" },
+]
+
+[[package]]
+name = "mujoco-stubs"
+version = "3.17.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e2/5e/19a7e087754d0329794986702e4f7bc7f274aad70b8f2b88dd8d7ddaac1f/mujoco_stubs-3.17.0.1.tar.gz", hash = "sha256:9cce83b40cc40a17c047d1fef26b92a7a0ea29c2716e693cf935b40b6f3673c3", size = 231025, upload-time = "2026-10-23T20:25:12.822Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/70/18/64f682f3b74f46443238a7fc0aa03b25242ce6473bc40e66aad180cb6fb8/mujoco_stubs-3.17.0.1-py3-none-any.whl", hash = "sha256:8a2e52d56b693db1d020b2450bb1c68e6400f1db595982091cd57d249c06eb2e", size = 123814, upload-time = "2026-10-23T20:25:11.53Z" },
 ]
 
 [[package]]
