@@ -22,8 +22,8 @@ INPUT_PAUSE_REASONS: frozenset[str] = frozenset({
 @dataclass(frozen=True)
 class TeleopConfig:
     gain: float = 0.20           # 米 / 归一化图像距离。
-    smoothing_seconds: float = 0.12
-    max_target_speed: float = 0.10  # 米 / 秒；限制笛卡尔目标，不是实测末端速度。
+    smoothing_seconds: float = 0.04
+    max_target_speed: float = 0.25  # 米 / 秒；限制笛卡尔目标，不是实测末端速度。
     stale_seconds: float = 0.30
 
     def __post_init__(self) -> None:

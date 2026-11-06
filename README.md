@@ -10,6 +10,12 @@ uv run --locked python main.py --mode teleop
 
 窗口左侧显示手部，右侧显示机械臂。启动保持静止；单手进入画面后按空格启用，慢慢移动手掌即可控制机械臂。空格暂停/重新对齐，`I` 切换关键点编号，`Q/Esc` 退出。丢手、多手或输入过期导致的暂停，在正常单手检测恢复后会自动继续；空格造成的手动暂停只能再次按空格解除。
 
+默认平滑时间为 0.04 秒，目标限速为 0.25 米/秒。可以用 `--smoothing` 和 `--target-speed` 调整跟随响应：
+
+```sh
+uv run --locked python main.py --mode teleop --smoothing 0.04 --target-speed 0.25
+```
+
 从项目根目录运行现有手部识别：
 
 ```sh
