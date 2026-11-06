@@ -8,7 +8,9 @@ import time
 import mujoco
 import numpy as np
 
+from .arguments import ProgramArgs
 from .arm_control import ArmControlError, ArmController
+from .data_types import ImageArray
 
 
 WINDOW = "AirArm - IK and position actuators"
@@ -18,7 +20,7 @@ PRESET_OFFSETS = ((0.04, 0.0), (0.04, 0.04), (-0.04, 0.04), (-0.04, -0.04), (0.0
 class PresetSequence:
     """在实际末端稳定到位后切换目标；每个目标最多等待 5 秒模拟时间。"""
 
-    def __init__(self, arm: ArmController, *, dwell_seconds: float = 0.2, timeout_seconds: float = 5.0):
+    def __init__(self, arm: ArmController, *, dwell_seconds: float = 0.2, timeout_seconds: float = 5.0) -> None:
         if not (0 < dwell_seconds < timeout_seconds < float("inf")):
             raise ValueError("Require 0 < dwell_seconds < timeout_seconds.")
         self.targets = [arm.home_xyz[:2] + offset for offset in PRESET_OFFSETS]
@@ -69,9 +71,9 @@ def handle_key(arm: ArmController, key: int, *, keyboard_control: bool) -> bool:
 
 
 class ArmRenderer:
-    """与 Day 2 一样用 OpenCV 显示；无窗口控制不实例化此对象。"""
+    """用 OpenCV 显示；无窗口控制不实例化此对象。"""
 
-    def __init__(self, arm: ArmController):
+    def __init__(self, arm: ArmController) -> None:
         self.arm = arm
         self.renderer = mujoco.Renderer(arm.model, height=480, width=640)
         self.camera = mujoco.MjvCamera()
@@ -87,7 +89,7 @@ class ArmRenderer:
         arm.model.site_size[arm.site_id] = [0.018, 0.018, 0.018]
         self.window_open = False
 
-    def frame(self, label: str):
+    def frame(self, label: str, *, footer: str = "W/S: X +/- | A/D: Y -/+ | H: home | Space: hold | Q: quit") -> ImageArray:
         import cv2
 
         arm = self.arm
@@ -107,7 +109,7 @@ class ArmRenderer:
         for row, text in enumerate(lines):
             cv2.putText(frame, text, (10, 22 + row * 23), cv2.FONT_HERSHEY_SIMPLEX,
                         0.48, (235, 235, 235), 1, cv2.LINE_AA)
-        cv2.putText(frame, "W/S: X +/- | A/D: Y -/+ | H: home | Space: hold | Q: quit",
+        cv2.putText(frame, footer,
                     (8, 628), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (235, 235, 235), 1)
         return frame
 
@@ -135,13 +137,13 @@ class ArmRenderer:
             cv2.destroyAllWindows()
 
 
-def run_arm(args) -> int:
+def run_arm(args: ProgramArgs) -> int:
     arm = ArmController(args.scene)
     sequence = PresetSequence(arm) if args.control == "preset" else None
-    renderer = None
+    renderer: ArmRenderer | None = None
     samples = [asdict(arm.state())]
     reason = "unknown"
-    error_message = None
+    error_message: str | None = None
     tick = 0
     started = time.monotonic()
     # 所有模式都按模拟时间限制；无窗口时不按墙钟休眠。

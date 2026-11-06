@@ -43,6 +43,8 @@ class ArmController:
         max_joint_speed: float = 0.6, workspace_half_size: float = 0.06,
     ):
         scene = Path(scene)
+        if not scene.is_file():
+            raise FileNotFoundError(f"UR5e scene missing: {scene}. See docs/DAY1_SETUP.md for model setup.")
         for name, value in (
             ("control_dt", control_dt), ("max_joint_speed", max_joint_speed),
             ("workspace_half_size", workspace_half_size),
@@ -61,26 +63,26 @@ class ArmController:
         self.max_joint_speed = float(max_joint_speed)
 
         # 按名称建立映射，不假定 qpos 的顺序一定与 actuator 的顺序相同。
-        joint_ids = np.array([self.model.joint(name).id for name in JOINT_NAMES])
-        self.actuator_ids = np.array([self.model.actuator(name).id for name in JOINT_NAMES])
-        self.qpos_ids = self.model.jnt_qposadr[joint_ids].copy()
-        self.dof_ids = self.model.jnt_dofadr[joint_ids].copy()
+        joint_ids = np.array([self.model.joint(name).id for name in JOINT_NAMES]) # 关节id
+        self.actuator_ids = np.array([self.model.actuator(name).id for name in JOINT_NAMES]) # 执行器id
+        self.qpos_ids = self.model.jnt_qposadr[joint_ids].copy() # 通用位置，adr: 地址
+        self.dof_ids = self.model.jnt_dofadr[joint_ids].copy() # 自由度
         for joint_id, actuator_id in zip(joint_ids, self.actuator_ids):
             if (
-                self.model.jnt_type[joint_id] != mujoco.mjtJoint.mjJNT_HINGE
-                or self.model.actuator_trntype[actuator_id] != mujoco.mjtTrn.mjTRN_JOINT
-                or self.model.actuator_trnid[actuator_id, 0] != joint_id
-                or not np.allclose(self.model.actuator_gear[actuator_id], [1, 0, 0, 0, 0, 0])
-                or self.model.actuator_dyntype[actuator_id] != mujoco.mjtDyn.mjDYN_NONE
-                or self.model.actuator_gaintype[actuator_id] != mujoco.mjtGain.mjGAIN_FIXED
-                or self.model.actuator_biastype[actuator_id] != mujoco.mjtBias.mjBIAS_AFFINE
-                or self.model.actuator_gainprm[actuator_id, 0] <= 0
+                self.model.jnt_type[joint_id] != mujoco.mjtJoint.mjJNT_HINGE # 检查是否为Hinge,仅有一个旋转自由度
+                or self.model.actuator_trntype[actuator_id] != mujoco.mjtTrn.mjTRN_JOINT # 检查执行器类型是否为直接作用于关节
+                or self.model.actuator_trnid[actuator_id, 0] != joint_id # 检查执行器是否作用于该关节
+                or not np.allclose(self.model.actuator_gear[actuator_id], [1, 0, 0, 0, 0, 0]) # 检查执行器齿轮传动比是否为1
+                or self.model.actuator_dyntype[actuator_id] != mujoco.mjtDyn.mjDYN_NONE # 检查执行器动力学类型是否有额外的动力学特性
+                or self.model.actuator_gaintype[actuator_id] != mujoco.mjtGain.mjGAIN_FIXED # 检查执行器增益类型是否为固定增益
+                or self.model.actuator_biastype[actuator_id] != mujoco.mjtBias.mjBIAS_AFFINE # 检查执行器偏置类型是否为仿射
+                or self.model.actuator_gainprm[actuator_id, 0] <= 0 # 检查执行器增益参数是否为正数
                 or not np.isclose(
                     self.model.actuator_biasprm[actuator_id, 1],
                     -self.model.actuator_gainprm[actuator_id, 0],
-                )
-                or not self.model.actuator_ctrllimited[actuator_id]
-                or not self.model.jnt_limited[joint_id]
+                ) # 检查执行器偏置参数是否与增益参数成反比
+                or not self.model.actuator_ctrllimited[actuator_id] # 检查执行器是否有限制控制输入
+                or not self.model.jnt_limited[joint_id] # 检查关节是否有限制运动范围
             ):
                 raise ValueError("Expected named hinge joints with direct position actuators and limits.")
         self.lower = np.maximum(
