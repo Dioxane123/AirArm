@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Literal
 
 class ProgramArgs(argparse.Namespace):
-    mode: Literal["hand", "arm", "teleop"]
+    mode: Literal["hand", "arm", "teleop", "challenge", "replay"]
     scene: Path
     control: Literal["preset", "keyboard"]
     index: int
@@ -26,3 +26,7 @@ class ProgramArgs(argparse.Namespace):
     target_speed: float
     stale_seconds: float
     auto_enable: bool
+    recordings_dir: Path
+    seed: int | None
+    trajectory: Path | None
+    replay_speed: float

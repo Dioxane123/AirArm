@@ -2,6 +2,22 @@
 
 普通摄像头驱动仿真机械臂的交互项目。
 
+三目标挑战（显示当前可操作平面、目标区域及运动轨迹）：
+
+```sh
+uv run --locked python main.py --mode challenge
+```
+
+单手出现后按空格开始，用实际末端进入橙色目标圈并停留 0.5 秒。三个目标依次完成后冻结画面并显示总用时；点击 Retry 或按 `R` 重新挑战，点击 Quit 或按 `Q/Esc` 退出。完成的运动自动保存到 `recordings/airarm-时间-编号.json`，每轮保留独立文件。
+
+仅回放已保存的机械臂运动（不使用摄像头）：
+
+```sh
+uv run --locked python main.py --mode replay --trajectory recordings/你的轨迹文件.json
+```
+
+将上面的文件名替换为完成时终端打印的实际文件。使用、计分规则、轨迹格式和代码导读见 [三目标挑战与轨迹回放](docs/DAY5_CHALLENGE_REPLAY.md)。
+
 摄像头手部识别与仿真机械臂联动：
 
 ```sh

@@ -1,4 +1,5 @@
 from dataclasses import asdict
+from collections.abc import Callable
 from importlib import metadata
 import json
 from pathlib import Path
@@ -89,11 +90,14 @@ class ArmRenderer:
         arm.model.site_size[arm.site_id] = [0.018, 0.018, 0.018]
         self.window_open = False
 
-    def frame(self, label: str, *, footer: str = "W/S: X +/- | A/D: Y -/+ | H: home | Space: hold | Q: quit") -> ImageArray:
+    def frame(self, label: str, *, footer: str = "W/S: X +/- | A/D: Y -/+ | H: home | Space: hold | Q: quit",
+              overlay: Callable[[mujoco.MjvScene], None] | None = None) -> ImageArray:
         import cv2
 
         arm = self.arm
         self.renderer.update_scene(arm.data, camera=self.camera, scene_option=self.options)
+        if overlay is not None:
+            overlay(self.renderer.scene)
         scene_frame = cv2.cvtColor(self.renderer.render(), cv2.COLOR_RGB2BGR)
         # 把读数放在图像外，避免挡住机械臂本体。
         frame = np.full((640, 640, 3), 25, dtype=np.uint8)

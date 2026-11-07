@@ -7,3 +7,4 @@ models/
 third_party/
 reports/
 MUJOCO_LOG.TXT
+recordings/
