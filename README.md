@@ -2,9 +2,9 @@
 
 普通摄像头驱动仿真机械臂的交互项目。
 
-![AirArm 手部遥操作演示：逆时针旋转 90° 后的完整视频](static/teleoperation-demo.gif)
+![AirArm 手部遥操作演示：完整视频与更新后的手部连线](static/teleoperation-demo.gif)
 
-## 摄像头手部识别与仿真机械臂联动：
+## 摄像头手部识别与仿真机械臂联动
 
 ```sh
 uv run --locked python main.py --mode teleop
@@ -19,6 +19,10 @@ uv run --locked python main.py --mode teleop --smoothing 0.04 --target-speed 0.2
 ```
 
 ## 三目标挑战（显示当前可操作平面、目标区域及运动轨迹）
+
+![AirArm 三目标挑战回放：目标切换、运动轨迹与完成用时](static/challenge-replay-demo.gif)
+
+使用 `recordings/airarm-20261107-163335-419d327e.json` 在 replay 模式下生成。
 
 ```sh
 uv run --locked python main.py --mode challenge
